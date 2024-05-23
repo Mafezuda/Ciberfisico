@@ -31,7 +31,7 @@ public class CacheDireto implements Cache {
     }
 
     @Override
-    public void imprimirEstatisticas() {
+    public void estatisticas() {
         System.out.println("Total de acertos: " + acertos);
         System.out.println("Total de falhas: " + falhas);
     }

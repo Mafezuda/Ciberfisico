@@ -8,7 +8,6 @@ public class Main {
         int tipoCache;
         int numeroDeAcessos;
 
-        // Menu para solicitar o tamanho da cache
         System.out.print("Digite o tamanho da cache: ");
         tamanhoCache = scanner.nextInt();
 
@@ -18,7 +17,6 @@ public class Main {
         System.out.println("2. Mapeamento Associativo");
         tipoCache = scanner.nextInt();
 
-        // Menu para solicitar o número de acessos à memória
         System.out.print("Digite o número de acessos à memória: ");
         numeroDeAcessos = scanner.nextInt();
 
@@ -36,7 +34,7 @@ public class Main {
             cache.acessarMemoria(endereco);
         }
 
-        cache.imprimirEstatisticas();
+        cache.estatisticas();
 
         scanner.close();
     }

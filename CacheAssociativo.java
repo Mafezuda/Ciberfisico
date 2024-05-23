@@ -27,12 +27,11 @@ public class CacheAssociativo {
             if (cache.size() >= tamanhoCache) {
                 cache.remove(0);
             }
-            // Adicionamos o novo bloco na cache
             cache.add(endereco);
         }
     }
 
-    public void imprimirEstatisticas() {
+    public void estatisticas() {
         System.out.println("Total de acertos: " + acertos);
         System.out.println("Total de falhas: " + falhas);
     }
