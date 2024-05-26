@@ -1,15 +1,24 @@
 public class Bloco {
-    private String posicaoMemoria;
+    private int valor;
+    private boolean lru;
 
-    public Bloco(String posicaoMemoria) {
-        this.posicaoMemoria = posicaoMemoria;
+    public Bloco(){
+        this.valor = -1;
+        this.lru = false;
     }
 
-    public String getPosicaoMemoria() { 
-        return posicaoMemoria; 
+    public Bloco(int valor){
+        this.valor = valor;
+        this.lru = false;
     }
 
-    public void setPosicaoMemoria(String posicaoMemoria) { 
-        this.posicaoMemoria = posicaoMemoria; 
-    }
+    public boolean getLru(){return lru;}
+
+    public void setLru(){this.lru = true;}
+
+    public int getValor(){return valor;}
+
+    public void setValor(int mudar){this.valor = mudar;}
+    
+    
 }

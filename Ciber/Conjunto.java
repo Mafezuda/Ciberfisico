@@ -1,40 +1,57 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Conjunto {
-    private int associativo;
-    private LinkedList<Bloco> blocos;
+    private int tamanhoConjunto;
+    private ArrayList<Bloco> blocos;
+    private ArrayList<Bloco> lru;
 
-    public Conjunto(int associativo) {
-        this.associativo = associativo;
-        this.blocos = new LinkedList<>();
+    public Conjunto(int tamanhoConjunto){
+        this.tamanhoConjunto = tamanhoConjunto;
+        this.blocos = new ArrayList<>();
+        this.lru = new ArrayList<>();
+    }
 
-        for (int i = 0; i < associativo; i++) {
-            blocos.add(new Bloco("-1"));
+
+    public int getTamanhoConjunto(){return tamanhoConjunto;}
+
+    public ArrayList<Bloco> getBlocos(){return blocos;}
+
+    public ArrayList<Bloco> getLru(){return lru;}
+
+    public void setBlocos(ArrayList<Bloco> linhasAtualizadas){this.blocos = linhasAtualizadas;}
+
+    public void dadoAntigo(){
+        Bloco b = blocos.get(blocos.size() - 1);
+        b.setLru();
+    }
+
+    public int verificarCampo(int posicao){
+        int indice = 0;
+        for(Bloco b: blocos){
+            if(b.getValor() == posicao){
+                return indice;
+            }
+            indice += 1;
+        }
+        return 10;
+    }
+
+    public int verificarCampoVazio(int posicao){
+        int indice = 0;
+        for(Bloco b: blocos){
+            if(b.getValor() == -1){
+                return indice;
+            }
+            indice += 1;
+        }
+        return 11;
+    }
+
+    public void preencher(){
+        for(int i = 0; i< tamanhoConjunto; i++){
+            Bloco bloco = new Bloco();
+            blocos.add(bloco);
         }
     }
-
-    public LinkedList<Bloco> getBlocos() { 
-        return blocos; 
-    }
-
-    public void atualizarLRU(Bloco bloco) {
-        blocos.remove(bloco);
-        blocos.addFirst(bloco);
-    }
-
-    public Bloco getBlocoMenosUsado() {
-        return blocos.getLast();
-    }
-
-    public void substituirBloco(Bloco bloco) {
-        blocos.removeLast();
-        blocos.addFirst(bloco);
-    }
-
-    public void imprimirBlocos() {
-        for (Bloco bloco : blocos) {
-            System.out.print(" " + bloco.getPosicaoMemoria() + " ");
-        }
-        System.out.println();
-    }
+   
 }

@@ -3,43 +3,44 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static float taxaAcertos(int hits, int posicoes) {
-        return ((float) hits / posicoes) * 100;
+    public static float taxaAcertos(int hits, int posicoes){
+        return ((float) hits/posicoes) * 100;
     }
 
-    public static int divisao(int linha, int tamanho) {
+    public static int divisao(int linha, int tamanho){
         return linha % tamanho;
     }
 
-    public static void imprimir(String mensagem) {
+    public static void imprimir(String mensagem){
         System.out.println(mensagem);
     }
 
-    public static void imprimirLinha(int quantidade) {
+    public static void imprimirLinha(int quantidade){
         String linha = "";
-        for (int i = 0; i < quantidade; i++) {
+        for (int i = 0; i < quantidade; i++){
             linha += "-";
         }
         imprimir(linha);
     }
 
-    public static String solicitatString(String pergunta) {
+    public static String solicitatString(String pergunta){
         Scanner scanner = new Scanner(System.in);
         System.out.print(pergunta);
         String resposta = scanner.nextLine();
         return resposta;
     }
 
-    public static int solicitaInt(String pergunta) {
+
+    public static int solicitaInt(String pergunta){
         Scanner scanner = new Scanner(System.in);
         System.out.print(pergunta);
         int resposta = scanner.nextInt();
         return resposta;
     }
 
-    public static void mapeamentoDireto() {
+    public static void mapeamentoDireto(){
         ArrayList<String> posicoes = new ArrayList<>();
-        imprimirLinha(100);
+        imprimirLinha(50);
         int tamanho = solicitaInt("Quantas linhas/blocos terá a cache: ");
         String posicao = null;
         while (!"2".equals(posicao)) {
@@ -54,35 +55,36 @@ public class Main {
                 System.out.println("Opção inválida, tente novamente!");
             }
         }
-
+    
         Cache teste = new Cache(tamanho);
         imprimirLinha(40);
         imprimir("Cache inicial:");
         imprimir("Tamanho da cache:  " + tamanho);
         teste.inicializarCache();
-        teste.imprimirCache();
+        teste.imprirCache();
         ArrayList<String> linhas = teste.getLinhas();
         imprimirLinha(40);
         int quantidadeAcessos = posicoes.size();
 
-        for (int i = 0; i < quantidadeAcessos; i++) {
-            String verifica = posicoes.get(i); // pega a posição digitada
+        for(int i = 0; i < quantidadeAcessos; i++){
+            String verifica = posicoes.get(i); //pega a posição digitada
             int linha = Integer.parseInt(verifica);
             int localCache = divisao(linha, tamanho);
 
-            if (verifica.equals(linhas.get(localCache))) { // verifica se o bloco já está na memória
+            if(verifica.equals(linhas.get(localCache))){ //verifica se o bloco já está na memória
                 teste.acerto();
                 imprimir("Linha " + i + " | posição de memória desejada " + verifica);
                 imprimir("Status: Hit");
-                teste.imprimirCache();
+                teste.imprirCache();
                 imprimirLinha(40);
-            } else {
+            }
+            else{
                 teste.erro();
                 imprimir("Linha " + i + " | posição de memória desejada " + verifica);
                 imprimir("Status: Miss");
                 linhas.set(localCache, verifica);
                 teste.setLinhas(linhas);
-                teste.imprimirCache();
+                teste.imprirCache();
                 imprimirLinha(40);
             }
         }
@@ -90,18 +92,18 @@ public class Main {
         imprimir("Memórias acessadas: " + quantidadeAcessos);
         imprimir("Número de hits: " + hits);
         imprimir("Número de misses: " + teste.getMisses());
-        imprimir("Taxas de acertos (hits): " + taxaAcertos(hits, quantidadeAcessos) + "%");
+        imprimir("Taxas de aceretos (hits): " + taxaAcertos(hits, quantidadeAcessos) + "%");
         imprimirLinha(80);
         imprimir("Conectividade em Sistemas Ciberfísicos - Prof. Guilherme - Mapeamento Direto");
         imprimir("Feito por: Equipe 02 - Julia Helena e Maria Fernanda ");
         imprimirLinha(80);
     }
 
-    public static void mapeamentoAssociativoConjunto() {
+    public static void mapeamentoAssociativo(){
         ArrayList<String> posicoes = new ArrayList<>();
-        imprimirLinha(100);
-        int tamanho = solicitaInt("Quantas linhas/blocos terá a cache: ");
-        int associativo = solicitaInt("Qual a associatividade por conjunto: ");
+        imprimirLinha(50);
+        int tamanhoConj = solicitaInt("Quantas linhas/blocos terá cada conjunto: ");
+        int quantConj = solicitaInt("Quantos conjuntos terá a cache: ");
         String posicao = null;
         while (!"2".equals(posicao)) {
             String linha = solicitatString("Qual posição você deseja acessar: ");
@@ -115,76 +117,113 @@ public class Main {
                 System.out.println("Opção inválida, tente novamente!");
             }
         }
-
-        Cache cache = new Cache(tamanho, associativo);
-        imprimirLinha(40);
-        imprimir("Cache inicial:");
-        imprimir("Tamanho da cache:  " + tamanho);
-        imprimir("Associatividade por conjunto: " + associativo);
-        cache.inicializarCache();
-        cache.imprimirCache();
-        imprimirLinha(40);
+        int tamanhoCache = quantConj * tamanhoConj;
+        Cache teste2 = new Cache(tamanhoCache);
         int quantidadeAcessos = posicoes.size();
 
-        for (int i = 0; i < quantidadeAcessos; i++) {
-            String verifica = posicoes.get(i);
-            int linha = Integer.parseInt(verifica);
-
-            // Calcula o conjunto correspondente
-            int conjunto = divisao(linha, tamanho / associativo);
-            Conjunto conjuntoCache = cache.getConjuntos().get(conjunto);
-            boolean found = false;
-            for (Bloco bloco : conjuntoCache.getBlocos()) {
-                if (verifica.equals(bloco.getPosicaoMemoria())) {
-                    cache.acerto();
-                    conjuntoCache.atualizarLRU(bloco);
-                    found = true;
-                    break;
-                }
-            }
-
-            // Se não encontrou o bloco, realiza uma substituição utilizando LRU
-            if (!found) {
-                cache.erro();
-                Bloco bloco = new Bloco(verifica);
-                conjuntoCache.substituirBloco(bloco);
-                conjuntoCache.atualizarLRU(bloco);
-            }
-
-            imprimir("Linha " + (i+1) + " | posição de memória desejada " + verifica);
-            if (found) {
-                imprimir("Status: Hit");
-            } else {
-                imprimir("Status: Miss");
-            }
-            cache.imprimirCache();
-            imprimirLinha(40);
+        for(int j = 0; j < quantConj; j++){
+            Conjunto conjunto = new Conjunto(tamanhoConj);
+            conjunto.preencher();
+            teste2.adicionarConjunto(conjunto);
         }
 
-        int hits = cache.getHits();
+        imprimirLinha(50);
+        imprimir("Cache inicial:");
+        imprimir("Tamanho da cache:  0" + quantConj + " conjuntos, 0" + tamanhoConj + " blocos por conj.");
+        teste2.imprirCacheConjuntos();
+        imprimirLinha(50);
+
+        for(int i = 0; i < quantidadeAcessos; i++){
+            String verifica = posicoes.get(i); //pega a posição digitada
+            int linha = Integer.parseInt(verifica);
+            int localCache = divisao(linha, quantConj);//posição na memória cache
+            ArrayList<Conjunto> conjuntos = teste2.getConjuntos();
+
+            Conjunto conj = conjuntos.get(localCache);
+            ArrayList<Bloco> blocos = conj.getBlocos();
+            //ArrayList<Bloco> lru = conj.getLru();
+
+            int  campo = conj.verificarCampo(linha);
+            int vazio = conj.verificarCampoVazio(linha);
+            int quantBlocos = blocos.size() - 1;
+            if(campo == 10){
+                teste2.erro();
+                if(vazio == 11){
+                    imprimir("Linha " + i + " | posição de memória desejada " + verifica);
+                    imprimir("Status: Miss");
+                    Bloco trocar = new Bloco(linha);    
+                    blocos.remove(quantBlocos);
+                    blocos.add(0, trocar);
+                    conj.setBlocos(blocos);
+                    conj.dadoAntigo();
+                    teste2.imprirCacheConjuntos();
+                    imprimirLinha(50);
+                }
+                else{
+                    imprimir("Linha " + i + " | posição de memória desejada " + verifica);
+                    imprimir("Status: Miss");
+                    Bloco trocar = new Bloco(linha);
+                    blocos.remove(vazio);
+                    blocos.add(0, trocar);
+                    if(blocos.get(quantBlocos).getValor() == -1){
+                        conj.setBlocos(blocos);
+                        teste2.imprirCacheConjuntos();
+                        imprimirLinha(50);
+                    }
+                    else{
+                        conj.setBlocos(blocos);
+                        conj.dadoAntigo();
+                        teste2.imprirCacheConjuntos();
+                        imprimirLinha(50);
+                    }
+                }
+            }
+            else{
+                imprimir("Linha " + i + " | posição de memória desejada " + verifica);
+                imprimir("Status: Hit");
+                teste2.acerto();
+                Bloco repetir = new Bloco(linha);
+                blocos.remove(campo);
+                blocos.add(0, repetir);
+                if(blocos.get(quantBlocos).getValor() == -1){
+                    conj.setBlocos(blocos);
+                    teste2.imprirCacheConjuntos();
+                    imprimirLinha(50);
+                }
+                else{
+                    conj.setBlocos(blocos);
+                    conj.dadoAntigo();
+                    teste2.imprirCacheConjuntos();
+                    imprimirLinha(50);
+                }
+            }
+        }
+        int hits = teste2.getHits();
         imprimir("Memórias acessadas: " + quantidadeAcessos);
         imprimir("Número de hits: " + hits);
-        imprimir("Número de misses: " + cache.getMisses());
-        imprimir("Taxas de acertos (hits): " + taxaAcertos(hits, quantidadeAcessos) + "%");
-        imprimirLinha(80);
-        imprimir("Conectividade em Sistemas Ciberfísicos - Prof. Guilherme - Mapeamento Associativo por Conjunto");
+        imprimir("Número de misses: " + teste2.getMisses());
+        imprimir("Taxas de aceretos (hits): " + taxaAcertos(hits, quantidadeAcessos) + "%");
+        imprimirLinha(95);
+        imprimir("Conectividade em Sistemas Ciberfísicos - Prof. Guilherme - Mapeamento Associativo por conjunto");
         imprimir("Feito por: Equipe 02 - Julia Helena e Maria Fernanda ");
-        imprimirLinha(80);
+        imprimirLinha(95);
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        imprimir("Escolha o tipo de mapeamento:");
-        imprimir("1 - Mapeamento Direto");
-        imprimir("2 - Mapeamento Associativo por Conjunto com LRU");
-        int escolha = scanner.nextInt();
+
+    public static void main(String[] args){ 
+        
+        imprimirLinha(50);
+        imprimir("                     Bem-vindo");
+        imprimirLinha(50);
+        int escolha = solicitaInt("Escolha um tipo de mapeamento: \n1 - Mapeamento Direto\n2 - Mapeamento Associativo por Conjunto\n");    
 
         if (escolha == 1) {
             mapeamentoDireto();
         } else if (escolha == 2) {
-            mapeamentoAssociativoConjunto();
+            mapeamentoAssociativo();
         } else {
             System.out.println("Opção inválida!");
         }
     }
+
 }
