@@ -3,150 +3,169 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static float taxaAcertos(int hits, int posicoes) {
-        return ((float) hits / posicoes) * 100;
+    public static float taxaAcertos(int hits, int posicoes){
+        return ((float) hits/posicoes) * 100;
     }
 
-    public static int divisao(int linha, int tamanho) {
+    public static int divisao(int linha, int tamanho){
         return linha % tamanho;
     }
 
-    public static void imprimir(String mensagem) {
+    public static void imprimir(String mensagem){
         System.out.println(mensagem);
     }
 
-    public static void imprimirLinha(int quantidade) {
+    public static void imprimirLinha(int quantidade){
         String linha = "";
-        for (int i = 0; i < quantidade; i++) {
+        for (int i = 0; i < quantidade; i++){
             linha += "-";
         }
         imprimir(linha);
     }
 
-    public static String solicitaString(String pergunta) {
+    public static String solicitatString(String pergunta){
         Scanner scanner = new Scanner(System.in);
         System.out.print(pergunta);
-        return scanner.nextLine();
+        String resposta = scanner.nextLine();
+        return resposta;
     }
 
-    public static int solicitaInt(String pergunta) {
+    public static int solicitaInt(String pergunta){
         Scanner scanner = new Scanner(System.in);
         System.out.print(pergunta);
-        return scanner.nextInt();
+        int resposta = scanner.nextInt();
+        return resposta;
     }
 
-    public static void mapeamentoDireto(Cache cache) {
+    public static void mapeamentoDireto(){
         ArrayList<String> posicoes = new ArrayList<>();
         imprimirLinha(100);
-        int tamanho = cache.getTamanho();
-        String posicao;
-
-        while (true) {
-            String linha = solicitaString("Qual posição você deseja acessar: ");
+        int tamanho = solicitaInt("Quantas linhas/blocos terá a cache: ");
+        String posicao = null;
+        while (!"2".equals(posicao)) {
+            String linha = solicitatString("Qual posição você deseja acessar: ");
             posicoes.add(linha);
-            posicao = solicitaString("Adicionar mais uma posição - [1] | Sair - [2]\n");
-            if ("2".equals(posicao)) {
+            posicao = solicitatString("Adicionar mais uma posição - [1] | Sair - [2]\n");
+            if ("1".equals(posicao)) {
+                continue;
+            } else if ("2".equals(posicao)) {
                 break;
-            } else if (!"1".equals(posicao)) {
+            } else {
                 System.out.println("Opção inválida, tente novamente!");
             }
         }
-
+    
+        Cache teste = new Cache(tamanho);
         imprimirLinha(40);
         imprimir("Cache inicial:");
-        imprimir("Tamanho da cache: " + tamanho);
-        cache.inicializarCache();
-        cache.imprirCache();
-        ArrayList<String> linhas = cache.getLinhas();
+        imprimir("Tamanho da cache:  " + tamanho);
+        teste.inicializarCache();
+        teste.imprirCache();
+        ArrayList<String> linhas = teste.getLinhas();
         imprimirLinha(40);
         int quantidadeAcessos = posicoes.size();
 
-        for (int i = 0; i < quantidadeAcessos; i++) {
-            String verifica = posicoes.get(i);
+        for(int i = 0; i < quantidadeAcessos; i++){
+            String verifica = posicoes.get(i); //pega a posição digitada
             int linha = Integer.parseInt(verifica);
             int localCache = divisao(linha, tamanho);
 
-            if (verifica.equals(linhas.get(localCache))) {
-                cache.acerto();
+            if(verifica.equals(linhas.get(localCache))){ //verifica se o bloco já está na memória
+                teste.acerto();
                 imprimir("Linha " + i + " | posição de memória desejada " + verifica);
                 imprimir("Status: Hit");
-            } else {
-                cache.erro();
+                teste.imprirCache();
+                imprimirLinha(40);
+            }
+            else{
+                teste.erro();
                 imprimir("Linha " + i + " | posição de memória desejada " + verifica);
                 imprimir("Status: Miss");
                 linhas.set(localCache, verifica);
-                cache.setLinhas(linhas);
+                teste.setLinhas(linhas);
+                teste.imprirCache();
+                imprimirLinha(40);
             }
-            cache.imprirCache();
-            imprimirLinha(40);
         }
-        int hits = cache.getHits();
+        int hits = teste.getHits();
         imprimir("Memórias acessadas: " + quantidadeAcessos);
         imprimir("Número de hits: " + hits);
-        imprimir("Número de misses: " + cache.getMisses());
-        imprimir("Taxas de acertos (hits): " + taxaAcertos(hits, quantidadeAcessos) + "%");
+        imprimir("Número de misses: " + teste.getMisses());
+        imprimir("Taxas de aceretos (hits): " + taxaAcertos(hits, quantidadeAcessos) + "%");
         imprimirLinha(80);
         imprimir("Conectividade em Sistemas Ciberfísicos - Prof. Guilherme - Mapeamento Direto");
         imprimir("Feito por: Equipe 02 - Julia Helena e Maria Fernanda ");
         imprimirLinha(80);
     }
 
-    public static void mapeamentoAssociativoConjunto(Cache cache) {
+    public static void mapeamentoAssociativoConjunto(){
         ArrayList<String> posicoes = new ArrayList<>();
         imprimirLinha(100);
-        int tamanho = cache.getTamanho();
-        int associativo = cache.getAssociatividade();
-        String posicao;
-
-        while (true) {
-            String linha = solicitaString("Qual posição você deseja acessar: ");
+        int tamanho = solicitaInt("Quantas linhas/blocos terá a cache: ");
+        int associativo = solicitaInt("Qual a associatividade por conjunto: ");
+        String posicao = null;
+        while (!"2".equals(posicao)) {
+            String linha = solicitatString("Qual posição você deseja acessar: ");
             posicoes.add(linha);
-            posicao = solicitaString("Adicionar mais uma posição - [1] | Sair - [2]\n");
-            if ("2".equals(posicao)) {
+            posicao = solicitatString("Adicionar mais uma posição - [1] | Sair - [2]\n");
+            if ("1".equals(posicao)) {
+                continue;
+            } else if ("2".equals(posicao)) {
                 break;
-            } else if (!"1".equals(posicao)) {
+            } else {
                 System.out.println("Opção inválida, tente novamente!");
             }
         }
-
+    
+        Cache cache = new Cache(tamanho, associativo);
         imprimirLinha(40);
         imprimir("Cache inicial:");
-        imprimir("Tamanho da cache: " + tamanho + " | Associatividade: " + associativo);
-        cache.inicializarConjuntos();
-        cache.imprimirConjuntos();
+        imprimir("Tamanho da cache:  " + tamanho);
+        imprimir("Associatividade por conjunto: " + associativo);
+        cache.inicializarCache();
+        cache.imprirCache();
+        ArrayList<String> linhas = cache.getLinhas();
         imprimirLinha(40);
         int quantidadeAcessos = posicoes.size();
-
-        for (int i = 0; i < quantidadeAcessos; i++) {
-            String verifica = posicoes.get(i);
+    
+        for(int i = 0; i < quantidadeAcessos; i++){
+            String verifica = posicoes.get(i); 
             int linha = Integer.parseInt(verifica);
-            int localConjunto = divisao(linha, tamanho / associativo);
-
-            Conjunto conjunto = cache.getConjuntos().get(localConjunto);
-            boolean hit = false;
-            for (Bloco bloco : conjunto.getBlocos()) {
-                if (bloco.getPosicaoMemoria().equals(verifica)) {
-                    hit = true;
-                    conjunto.atualizarLRU(bloco);
+            int localCache = divisao(linha, tamanho);
+    
+            // Calcula o conjunto correspondente
+            int conjunto = divisao(linha, tamanho / associativo);
+            Conjunto conjuntoCache = cache.getConjuntos().get(conjunto);
+    
+            // Busca o bloco na cache associativa por conjunto
+            boolean found = false;
+            for (Bloco bloco : conjuntoCache.getBlocos()) {
+                if (verifica.equals(bloco.getPosicaoMemoria())) {
+                    cache.acerto();
+                    conjuntoCache.atualizarLRU(bloco);
+                    found = true;
                     break;
                 }
             }
-
-            if (hit) {
-                cache.acerto();
-                imprimir("Linha " + i + " | posição de memória desejada " + verifica);
+    
+            // Se não encontrou o bloco, realiza uma substituição utilizando LRU
+            if (!found) {
+                cache.erro();
+                Bloco bloco = new Bloco(verifica);
+                conjuntoCache.substituirBloco(bloco);
+                conjuntoCache.atualizarLRU(bloco);
+            }
+    
+            imprimir("Linha " + i + " | posição de memória desejada " + verifica);
+            if (found) {
                 imprimir("Status: Hit");
             } else {
-                cache.erro();
-                imprimir("Linha " + i + " | posição de memória desejada " + verifica);
                 imprimir("Status: Miss");
-                Bloco blocoMenosUsado = conjunto.getBlocoMenosUsado();
-                blocoMenosUsado.setPosicaoMemoria(verifica);
-                conjunto.atualizarLRU(blocoMenosUsado);
             }
-            cache.imprimirConjuntos();
+            cache.imprirCache();
             imprimirLinha(40);
         }
+    
         int hits = cache.getHits();
         imprimir("Memórias acessadas: " + quantidadeAcessos);
         imprimir("Número de hits: " + hits);
@@ -157,8 +176,9 @@ public class Main {
         imprimir("Feito por: Equipe 02 - Julia Helena e Maria Fernanda ");
         imprimirLinha(80);
     }
+    
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
         imprimir("Escolha o tipo de mapeamento:");
         imprimir("1 - Mapeamento Direto");
@@ -166,14 +186,9 @@ public class Main {
         int escolha = scanner.nextInt();
 
         if (escolha == 1) {
-            int tamanho = solicitaInt("Quantas linhas/blocos terá a cache: ");
-            Cache cache = new Cache(tamanho);
-            mapeamentoDireto(cache);
+            mapeamentoDireto(); 
         } else if (escolha == 2) {
-            int tamanho = solicitaInt("Quantas linhas/blocos terá a cache: ");
-            int associativo = solicitaInt("Qual a associatividade da cache: ");
-            Cache cache = new Cache(tamanho, associativo);
-            mapeamentoAssociativoConjunto(cache);
+            mapeamentoAssociativoConjunto(); 
         } else {
             System.out.println("Opção inválida!");
         }
