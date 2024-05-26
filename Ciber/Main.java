@@ -54,13 +54,13 @@ public class Main {
                 System.out.println("Opção inválida, tente novamente!");
             }
         }
-    
+
         Cache teste = new Cache(tamanho);
         imprimirLinha(40);
         imprimir("Cache inicial:");
         imprimir("Tamanho da cache:  " + tamanho);
         teste.inicializarCache();
-        teste.imprirCache();
+        teste.imprimirCache();
         ArrayList<String> linhas = teste.getLinhas();
         imprimirLinha(40);
         int quantidadeAcessos = posicoes.size();
@@ -74,7 +74,7 @@ public class Main {
                 teste.acerto();
                 imprimir("Linha " + i + " | posição de memória desejada " + verifica);
                 imprimir("Status: Hit");
-                teste.imprirCache();
+                teste.imprimirCache();
                 imprimirLinha(40);
             }
             else{
@@ -83,7 +83,7 @@ public class Main {
                 imprimir("Status: Miss");
                 linhas.set(localCache, verifica);
                 teste.setLinhas(linhas);
-                teste.imprirCache();
+                teste.imprimirCache();
                 imprimirLinha(40);
             }
         }
@@ -116,14 +116,14 @@ public class Main {
                 System.out.println("Opção inválida, tente novamente!");
             }
         }
-    
+
         Cache cache = new Cache(tamanho, associativo);
         imprimirLinha(40);
         imprimir("Cache inicial:");
         imprimir("Tamanho da cache:  " + tamanho);
         imprimir("Associatividade por conjunto: " + associativo);
         cache.inicializarCache();
-        cache.imprirCache();
+        cache.imprimirCache();
         ArrayList<String> linhas = cache.getLinhas();
         imprimirLinha(40);
         int quantidadeAcessos = posicoes.size();
@@ -136,8 +136,6 @@ public class Main {
             // Calcula o conjunto correspondente
             int conjunto = divisao(linha, tamanho / associativo);
             Conjunto conjuntoCache = cache.getConjuntos().get(conjunto);
-    
-            // Busca o bloco na cache associativa por conjunto
             boolean found = false;
             for (Bloco bloco : conjuntoCache.getBlocos()) {
                 if (verifica.equals(bloco.getPosicaoMemoria())) {
@@ -162,7 +160,7 @@ public class Main {
             } else {
                 imprimir("Status: Miss");
             }
-            cache.imprirCache();
+            cache.imprimirCache();
             imprimirLinha(40);
         }
     
@@ -176,7 +174,6 @@ public class Main {
         imprimir("Feito por: Equipe 02 - Julia Helena e Maria Fernanda ");
         imprimirLinha(80);
     }
-    
 
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
@@ -194,3 +191,4 @@ public class Main {
         }
     }
 }
+

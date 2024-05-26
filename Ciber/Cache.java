@@ -79,7 +79,7 @@ public class Cache {
         }
     }
 
-    public void imprirCache() {
+    public void imprimirCache() {
         System.out.print("Posição cache  |");
         System.out.print("  Posição memória\n");
         for (int i = 0; i < tamanho; i++) {
