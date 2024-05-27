@@ -30,13 +30,56 @@ public class Main {
         return resposta;
     }
 
-
-    public static int solicitaInt(String pergunta){
+    public static int solicitaInt(String pergunta) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print(pergunta);
-        int resposta = scanner.nextInt();
+        int resposta = -1;
+        boolean entradaValida = false;
+
+        while (!entradaValida) {
+            System.out.print(pergunta);
+            if (scanner.hasNextInt()) {
+                resposta = scanner.nextInt();
+                if (resposta >= 0) {
+                    entradaValida = true;
+                } else {
+                    System.out.println("Insira um número positivo.");
+                    imprimirLinha(50);
+                }
+            } else {
+                System.out.println("Inválido, digite um número.");
+                imprimirLinha(50);
+                scanner.next(); // Limpa a entrada inválida
+            }
+        }
+
         return resposta;
     }
+
+    public static String solicitaPosicao(String pergunta) {
+        Scanner scanner = new Scanner(System.in);
+        String resposta = null;
+        boolean entradaValida = false;
+
+        while (!entradaValida) {
+            System.out.print(pergunta);
+            resposta = scanner.next();
+            try {
+                int numero = Integer.parseInt(resposta);
+                if (numero >= 0) {
+                    entradaValida = true;
+                } else {
+                    System.out.println("Insira um número positivo.");
+                    imprimirLinha(50);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Inválido, insira um número.");
+                imprimirLinha(50);
+            }
+        }
+
+        return resposta;
+    }
+
 
     public static void mapeamentoDireto(){
         ArrayList<String> posicoes = new ArrayList<>();
@@ -44,7 +87,7 @@ public class Main {
         int tamanho = solicitaInt("Quantas linhas/blocos terá a cache: ");
         String posicao = null;
         while (!"2".equals(posicao)) {
-            String linha = solicitatString("Qual posição você deseja acessar: ");
+            String linha = solicitaPosicao("Qual posição você deseja acessar: ");
             posicoes.add(linha);
             posicao = solicitatString("Adicionar mais uma posição - [1] | Sair - [2]\n");
             if ("1".equals(posicao)) {
@@ -106,7 +149,7 @@ public class Main {
         int quantConj = solicitaInt("Quantos conjuntos terá a cache: ");
         String posicao = null;
         while (!"2".equals(posicao)) {
-            String linha = solicitatString("Qual posição você deseja acessar: ");
+            String linha = solicitaPosicao("Qual posição você deseja acessar: ");
             posicoes.add(linha);
             posicao = solicitatString("Adicionar mais uma posição - [1] | Sair - [2]\n");
             if ("1".equals(posicao)) {
@@ -141,7 +184,6 @@ public class Main {
 
             Conjunto conj = conjuntos.get(localCache);
             ArrayList<Bloco> blocos = conj.getBlocos();
-            //ArrayList<Bloco> lru = conj.getLru();
 
             int  campo = conj.verificarCampo(linha);
             int vazio = conj.verificarCampoVazio(linha);
@@ -212,17 +254,30 @@ public class Main {
 
     public static void main(String[] args){ 
         
+        boolean opcaoValida = false;
+
         imprimirLinha(50);
         imprimir("                     Bem-vindo");
         imprimirLinha(50);
-        int escolha = solicitaInt("Escolha um tipo de mapeamento: \n1 - Mapeamento Direto\n2 - Mapeamento Associativo por Conjunto\n");    
 
-        if (escolha == 1) {
-            mapeamentoDireto();
-        } else if (escolha == 2) {
-            mapeamentoAssociativo();
-        } else {
-            System.out.println("Opção inválida!");
+        while (!opcaoValida) {
+           
+            int escolha = solicitaInt("Escolha um tipo de mapeamento: \n1 - Mapeamento Direto\n2 - Mapeamento Associativo por Conjunto\n");
+
+            switch (escolha) {
+                case 1:
+                    mapeamentoDireto();
+                    opcaoValida = true;
+                    break;
+                case 2:
+                    mapeamentoAssociativo();
+                    opcaoValida = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+                    imprimirLinha(50);
+                    break;
+            }
         }
     }
 

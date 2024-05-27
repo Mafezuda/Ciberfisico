@@ -3,20 +3,16 @@ import java.util.ArrayList;
 public class Conjunto {
     private int tamanhoConjunto;
     private ArrayList<Bloco> blocos;
-    private ArrayList<Bloco> lru;
 
     public Conjunto(int tamanhoConjunto){
         this.tamanhoConjunto = tamanhoConjunto;
         this.blocos = new ArrayList<>();
-        this.lru = new ArrayList<>();
     }
 
 
     public int getTamanhoConjunto(){return tamanhoConjunto;}
 
     public ArrayList<Bloco> getBlocos(){return blocos;}
-
-    public ArrayList<Bloco> getLru(){return lru;}
 
     public void setBlocos(ArrayList<Bloco> linhasAtualizadas){this.blocos = linhasAtualizadas;}
 
