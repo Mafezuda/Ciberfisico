@@ -39,7 +39,7 @@ public class Main {
             System.out.print(pergunta);
             if (scanner.hasNextInt()) {
                 resposta = scanner.nextInt();
-                if (resposta >= 0) {
+                if (resposta > 0) {
                     entradaValida = true;
                 } else {
                     System.out.println("Insira um número positivo.");
