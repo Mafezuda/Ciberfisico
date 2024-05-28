@@ -29,7 +29,7 @@ public class Conjunto {
             }
             indice += 1;
         }
-        return 10;
+        return -2;//Caso não encontre a posição pedida na cache 
     }
 
     public int verificarCampoVazio(int posicao){
@@ -40,7 +40,7 @@ public class Conjunto {
             }
             indice += 1;
         }
-        return 11;
+        return -2;//caso não encontre campo vazio na cache
     }
 
     public void preencher(){
