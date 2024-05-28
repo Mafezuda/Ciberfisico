@@ -188,9 +188,9 @@ public class Main {
             int  campo = conj.verificarCampo(linha);
             int vazio = conj.verificarCampoVazio(linha);
             int quantBlocos = blocos.size() - 1;
-            if(campo == 10){
+            if(campo == -2){
                 teste2.erro();
-                if(vazio == 11){
+                if(vazio == -2){
                     imprimir("Linha " + i + " | posição de memória desejada " + verifica);
                     imprimir("Status: Miss");
                     Bloco trocar = new Bloco(linha);    
